@@ -40,10 +40,10 @@ jobs:
           fi
 
           mkdir -p artifacts
-          cp "$APK_PATH" artifacts/app-release.apk
+          cp "$APK_PATH" test/app-release.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          path: artifacts/app-release.apk
+          path: test/app-release.apk
