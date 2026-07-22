@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      width: 1024px; 
+      height: 1024px; 
+      background: #2E7D32;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    }
+    .icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      margin-bottom: 50px;
+    }
+    /* Photo frame */
+    .frame {
+      width: 320px;
+      height: 260px;
+      border: 22px solid white;
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      background: #2E7D32;
+    }
+    .mountain1 {
+      position: absolute;
+      bottom: 0;
+      left: -20px;
+      width: 0;
+      height: 0;
+      border-left: 140px solid transparent;
+      border-right: 100px solid transparent;
+      border-bottom: 160px solid rgba(255,255,255,0.95);
+    }
+    .mountain2 {
+      position: absolute;
+      bottom: 0;
+      left: 120px;
+      width: 0;
+      height: 0;
+      border-left: 120px solid transparent;
+      border-right: 120px solid transparent;
+      border-bottom: 120px solid rgba(255,255,255,0.75);
+    }
+    .sun {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 50%;
+      top: 30px;
+      right: 40px;
+    }
+    /* Trash can */
+    .trash {
+      width: 220px;
+      height: 260px;
+    }
+    .trash-handle {
+      width: 80px;
+      height: 22px;
+      background: white;
+      border-radius: 6px;
+      margin: 0 auto 10px;
+    }
+    .trash-lid {
+      width: 180px;
+      height: 22px;
+      background: white;
+      border-radius: 6px;
+      margin: 0 auto;
+    }
+    .trash-body {
+      width: 220px;
+      height: 190px;
+      background: white;
+      border-radius: 14px;
+      margin-top: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+    }
+    .line {
+      width: 26px;
+      height: 110px;
+      background: #2E7D32;
+      border-radius: 7px;
+    }
+    /* Text */
+    .text-container {
+      text-align: center;
+      color: white;
+    }
+    .title {
+      font-size: 130px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -2px;
+    }
+    .subtitle {
+      font-size: 64px;
+      font-weight: 700;
+      opacity: 0.92;
+      margin-top: 10px;
+      letter-spacing: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="icon-container">
+    <div class="frame">
+      <div class="mountain1"></div>
+      <div class="mountain2"></div>
+      <div class="sun"></div>
+    </div>
+    <div class="trash">
+      <div class="trash-handle"></div>
+      <div class="trash-lid"></div>
+      <div class="trash-body">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+  <div class="text-container">
+    <div class="title">Galeri</div>
+    <div class="subtitle">DETOKS</div>
+  </div>
+</body>
+</html>

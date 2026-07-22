@@ -1,0 +1,49 @@
+name: Flutter Build APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: |
+          flutter build apk --release || true
+
+          APK_PATH=$(find . -type f -name "app-release.apk" -print -quit)
+
+          if [ -z "$APK_PATH" ]; then
+            echo "APK bulunamadı."
+            exit 1
+          fi
+
+          mkdir -p artifacts
+          cp "$APK_PATH" artifacts/app-release.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: artifacts/app-release.apk

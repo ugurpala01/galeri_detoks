@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      width: 512px; 
+      height: 512px; 
+      background: #2E7D32;
+      overflow: hidden;
+    }
+    #canvas { display: none; }
+    #download { display: none; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="512" height="512"></canvas>
+  <a id="download" download="logo.png">Download</a>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Background
+    ctx.fillStyle = '#2E7D32';
+    ctx.fillRect(0, 0, 512, 512);
+    
+    // Photo frame
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 14;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.roundRect(76, 146, 200, 160, 20);
+    ctx.stroke();
+    
+    // Mountains
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.beginPath();
+    ctx.moveTo(90, 306);
+    ctx.lineTo(160, 226);
+    ctx.lineTo(230, 306);
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.beginPath();
+    ctx.moveTo(160, 306);
+    ctx.lineTo(220, 246);
+    ctx.lineTo(280, 306);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Sun
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(236, 186, 20, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Trash can handle
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.roundRect(286, 146, 50, 14, 4);
+    ctx.fill();
+    
+    // Trash can lid
+    ctx.beginPath();
+    ctx.roundRect(276, 166, 110, 16, 4);
+    ctx.fill();
+    
+    // Trash can body
+    ctx.beginPath();
+    ctx.roundRect(276, 186, 140, 120, 10);
+    ctx.fill();
+    
+    // Trash lines
+    ctx.fillStyle = '#2E7D32';
+    ctx.beginPath();
+    ctx.roundRect(306, 216, 16, 70, 5);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.roundRect(338, 216, 16, 70, 5);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.roundRect(370, 216, 16, 70, 5);
+    ctx.fill();
+    
+    // Download
+    const link = document.getElementById('download');
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=800, height=600">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { 
+      width: 800px; 
+      height: 600px; 
+      background: #1a1a2e;
+      overflow: hidden;
+    }
+    .container {
+      width: 800px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: white;
+      padding: 20px;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #4CAF50;
+    }
+    .subtitle {
+      font-size: 14px;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    .demo-container {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    .phone {
+      width: 180px;
+      height: 320px;
+      background: #333;
+      border-radius: 20px;
+      border: 6px solid #555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+      position: relative;
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #f5f5f5;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    .app-header {
+      width: 100%;
+      height: 35px;
+      background: #4CAF50;
+      border-radius: 15px 15px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .scan-button {
+      width: 140px;
+      height: 35px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 18px;
+      font-size: 12px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+    .progress-bar {
+      width: 140px;
+      height: 15px;
+      background: #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .progress-fill {
+      width: 60%;
+      height: 100%;
+      background: #4CAF50;
+      border-radius: 8px;
+    }
+    .notification {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 60px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      font-size: 10px;
+      padding: 8px;
+    }
+    .notification-title {
+      font-weight: bold;
+      color: #4CAF50;
+      margin-bottom: 3px;
+      font-size: 11px;
+    }
+    .arrow {
+      font-size: 36px;
+      color: #4CAF50;
+    }
+    .status-text {
+      font-size: 12px;
+      margin-top: 15px;
+      opacity: 0.9;
+      text-align: center;
+    }
+    .permission-badge {
+      background: #2196F3;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">FOREGROUND_SERVICE_DATA_SYNC Demo</div>
+    <div class="subtitle">Galeri Detoks - Arka Plan Tarama İzni Kullanımı</div>
+    
+    <div class="demo-container">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="app-header">Galeri Detoks</div>
+          <div style="margin-top: 30px; text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 8px;">📸🗑️</div>
+            <div style="font-size: 11px; margin-bottom: 15px;">Kutlama mesajı görsellerini bul</div>
+            <button class="scan-button">Taramayı Başlat</button>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <div style="font-size: 10px;">1250 / 2084 görsel</div>
+          </div>
+        </div>
+        <div class="notification">
+          <div class="notification-title">🔔 Galeri Tarama</div>
+          <div>Fotoğraf tarama devam ediyor...</div>
+          <div style="font-size: 9px; margin-top: 3px;">%60 tamamlandı</div>
+        </div>
+      </div>
+      
+      <div class="arrow">→</div>
+      
+      <div class="phone">
+        <div class="phone-screen">
+          <div style="font-size: 48px; margin-bottom: 15px;">🏠</div>
+          <div style="font-size: 14px; font-weight: bold; margin-bottom: 8px;">Ana Ekran</div>
+          <div style="font-size: 11px; text-align: center; padding: 0 15px;">
+            Uygulama arka planda çalışmaya devam ediyor
+          </div>
+          <div style="margin-top: 20px; padding: 10px; background: #e8f5e9; border-radius: 8px; width: 140px;">
+            <div style="font-size: 10px; color: #2e7d32; font-weight: bold;">✅ Tarama Devam Ediyor</div>
+            <div style="font-size: 9px; color: #555; margin-top: 3px;">FOREGROUND_SERVICE aktif</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="permission-badge">android.permission.FOREGROUND_SERVICE_DATA_SYNC</div>
+    <div class="status-text">Kullanıcı uygulamayı arka plana atsa bile, tarama işlemi bildirim çubuğunda devam eder</div>
+  </div>
+</body>
+</html>

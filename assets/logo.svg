@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Arka plan -->
+  <rect width="512" height="512" rx="128" fill="#2E7D32"/>
+  
+  <!-- Fotoğraf çerçevesi -->
+  <rect x="96" y="116" width="240" height="180" rx="24" fill="none" stroke="#FFFFFF" stroke-width="20"/>
+  
+  <!-- Dağlar (fotoğraf içeriği) -->
+  <polygon points="116,296 176,216 236,276 296,196 336,296" fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Güneş -->
+  <circle cx="276" cy="176" r="20" fill="#FFFFFF"/>
+  
+  <!-- Çöp kutusu -->
+  <g transform="translate(280, 240)">
+    <!-- Kapak -->
+    <rect x="16" y="0" width="88" height="16" rx="4" fill="#FFFFFF"/>
+    <!-- Kulpu -->
+    <rect x="44" y="-12" width="32" height="16" rx="4" fill="#FFFFFF"/>
+    <!-- Gövde -->
+    <rect x="8" y="16" width="104" height="120" rx="8" fill="#FFFFFF"/>
+    <!-- Çizgiler -->
+    <rect x="36" y="40" width="12" height="64" rx="4" fill="#2E7D32"/>
+    <rect x="60" y="40" width="12" height="64" rx="4" fill="#2E7D32"/>
+    <rect x="84" y="40" width="12" height="64" rx="4" fill="#2E7D32"/>
+  </g>
+</svg>

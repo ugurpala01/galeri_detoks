@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Galeri Detoks (debug)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Galeri Detoks (profile)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Galeri Detoks (release)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Galeri Detoks (emulator)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "emulator",
+      "flutterMode": "debug"
+    }
+  ]
+}
