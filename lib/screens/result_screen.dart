@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../models/scan_result.dart';
-import '../services/photo_service.dart';
 import '../services/scan_result_service.dart';
-import '../services/statistics_service.dart';
 import '../widgets/photo_preview_dialog.dart';
 import 'scan_screen.dart';
 

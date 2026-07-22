@@ -77,6 +77,29 @@ class NotificationService {
     );
   }
 
+  static Future<void> showErrorNotification(String error) async {
+    await _plugin.cancelAll();
+
+    final androidDetails = AndroidNotificationDetails(
+      'galeri_detoks_scan',
+      'Galeri Detoks Tarama',
+      channelDescription: 'Galeri tarama bildirimleri',
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
+      ongoing: false,
+      autoCancel: true,
+    );
+    final details = NotificationDetails(android: androidDetails);
+
+    await _plugin.show(
+      _notificationId,
+      'Tarama Hatasi',
+      error,
+      details,
+    );
+  }
+
   static Future<void> cancelAll() async {
     await _plugin.cancelAll();
   }
