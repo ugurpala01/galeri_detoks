@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -30,7 +30,7 @@ jobs:
 
       - name: Build APK
         run: |
-          flutter build apk --release || true
+          flutter build apk --release
 
           APK_PATH=$(find . -type f -name "app-release.apk" -print -quit)
 
@@ -43,7 +43,7 @@ jobs:
           cp "$APK_PATH" test/app-release.apk
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: release-apk
           path: test/app-release.apk
