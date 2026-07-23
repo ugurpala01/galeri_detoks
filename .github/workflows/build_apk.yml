@@ -33,13 +33,13 @@ jobs:
         run: |
           flutter clean
           set +e
-          flutter build apk --release --android-skip-build-dependency-validation --verbose 2>&1 | tee build.log
+          flutter build apk --release --android-skip-build-dependency-validation 2>&1 | tee build.log
           BUILD_EXIT=${PIPESTATUS[0]}
 
           echo "Generated APK files:"
           find . -type f \( -name "*.apk" -o -name "*.aab" \) -print
 
-          APK_PATH=$(find build -type f -name "app-release.apk" -print -quit)
+          APK_PATH=$(find . -type f -name "app-release.apk" -print -quit)
           if [ -z "$APK_PATH" ]; then
             echo "Flutter APK build failed. Relevant Gradle errors:"
             grep -E "FAILURE:|What went wrong:|Caused by:|Execution failed for task|error:" build.log || true
