@@ -32,10 +32,27 @@ jobs:
       - name: Build APK
         run: |
           flutter clean
-          flutter build apk --release --android-skip-build-dependency-validation
-          test -f build/app/outputs/flutter-apk/app-release.apk
+          set +e
+          flutter build apk --release --android-skip-build-dependency-validation --verbose 2>&1 | tee build.log
+          BUILD_EXIT=${PIPESTATUS[0]}
+
+          echo "Generated APK files:"
+          find . -type f \( -name "*.apk" -o -name "*.aab" \) -print
+
+          if [ "$BUILD_EXIT" -ne 0 ]; then
+            echo "Flutter APK build failed. Relevant Gradle errors:"
+            grep -E "FAILURE:|What went wrong:|Caused by:|Execution failed for task|error:" build.log || true
+            exit "$BUILD_EXIT"
+          fi
+
+          APK_PATH=$(find build -type f -name "app-release.apk" -print -quit)
+          if [ -z "$APK_PATH" ]; then
+            echo "APK bulunamadı."
+            exit 1
+          fi
+
           mkdir -p artifacts
-          cp build/app/outputs/flutter-apk/app-release.apk artifacts/app-release.apk
+          cp "$APK_PATH" artifacts/app-release.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v5
