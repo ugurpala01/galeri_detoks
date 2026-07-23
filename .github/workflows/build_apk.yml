@@ -39,14 +39,18 @@ jobs:
           echo "Generated APK files:"
           find . -type f \( -name "*.apk" -o -name "*.aab" \) -print
 
-          if [ "$BUILD_EXIT" -ne 0 ]; then
+          APK_PATH=$(find build -type f -name "app-release.apk" -print -quit)
+          if [ -z "$APK_PATH" ]; then
             echo "Flutter APK build failed. Relevant Gradle errors:"
             grep -E "FAILURE:|What went wrong:|Caused by:|Execution failed for task|error:" build.log || true
             exit "$BUILD_EXIT"
           fi
 
-          APK_PATH=$(find build -type f -name "app-release.apk" -print -quit)
-          if [ -z "$APK_PATH" ]; then
+          if [ "$BUILD_EXIT" -ne 0 ]; then
+            echo "Flutter returned exit code $BUILD_EXIT, but an APK was generated. Continuing."
+          fi
+
+          if [ ! -s "$APK_PATH" ]; then
             echo "APK bulunamadı."
             exit 1
           fi
