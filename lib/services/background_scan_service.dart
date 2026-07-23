@@ -46,7 +46,7 @@ Future<void> scheduleBackgroundScan(
       requiresBatteryNotLow: false,
       requiresCharging: false,
       requiresDeviceIdle: false,
-      networkType: NetworkType.not_required,
+      networkType: NetworkType.notRequired,
     ),
   );
 }
