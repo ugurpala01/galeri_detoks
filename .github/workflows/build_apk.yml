@@ -1,4 +1,4 @@
-name: Flutter Build APK
+﻿name: Flutter Build APK
 
 on:
   push:
@@ -23,6 +23,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.44.7'
           channel: 'stable'
 
       - name: Install dependencies
@@ -35,7 +36,7 @@ jobs:
           APK_PATH=$(find . -type f -name "app-release.apk" -print -quit)
 
           if [ -z "$APK_PATH" ]; then
-            echo "APK bulunamadı."
+            echo "APK bulunamadÄ±."
             exit 1
           fi
 
@@ -47,3 +48,4 @@ jobs:
         with:
           name: release-apk
           path: test/app-release.apk
+
