@@ -21,6 +21,7 @@ void main() async {
   await StatisticsService.init();
   await ScanResultService.init();
   await NotificationService.init();
+  await NotificationService.cancelAll();
 
   // 2. Arka Plan Servisini Başlatma (Yeni eklendi)
   _initForegroundTask();

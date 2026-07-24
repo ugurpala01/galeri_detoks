@@ -23,14 +23,15 @@ class ScanResultAdapter extends TypeAdapter<ScanResult> {
       totalScanned: fields[3] as int,
       detectedCount: fields[4] as int,
       keywords: (fields[5] as List).cast<String>(),
-      deletedCount: fields[6] as int,
+      deletedCount: fields[6] as int? ?? 0,
+      scannedAssetIds: (fields[7] as List?)?.cast<String>() ?? const [],
     );
   }
 
   @override
   void write(BinaryWriter writer, ScanResult obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -45,6 +46,9 @@ class ScanResultAdapter extends TypeAdapter<ScanResult> {
       ..write(obj.keywords)
       ..writeByte(6)
       ..write(obj.deletedCount);
+    writer
+      ..writeByte(7)
+      ..write(obj.scannedAssetIds);
   }
 
   @override

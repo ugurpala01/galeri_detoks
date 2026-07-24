@@ -25,6 +25,9 @@ class ScanResult {
   @HiveField(6)
   final int deletedCount;
 
+  @HiveField(7)
+  final List<String> scannedAssetIds;
+
   ScanResult({
     required this.id,
     required this.scanDate,
@@ -33,5 +36,6 @@ class ScanResult {
     required this.detectedCount,
     required this.keywords,
     this.deletedCount = 0,
+    this.scannedAssetIds = const [],
   });
 }

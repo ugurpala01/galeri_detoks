@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../services/battery_optimization_service.dart';
 import '../services/permission_service.dart';
 import 'scan_mode_screen.dart';
 
@@ -15,6 +16,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
   bool _photoGranted = false;
   bool _notifGranted = false;
   bool _photoPermanentlyDenied = false;
+  bool _batteryOptimized = false;
 
   @override
   void initState() {
@@ -25,6 +27,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
   Future<void> _checkPermissions() async {
     final hasPhoto = await PermissionService.checkPhotoPermissions();
     final hasNotif = await Permission.notification.status;
+    final batteryOptimized =
+        !(await BatteryOptimizationService.isIgnoringBatteryOptimizations());
 
     if (hasPhoto && hasNotif.isGranted) {
       _navigateToScanMode();
@@ -35,6 +39,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
       setState(() {
         _photoGranted = hasPhoto;
         _notifGranted = hasNotif.isGranted;
+        _batteryOptimized = batteryOptimized;
       });
     }
   }
@@ -51,6 +56,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
       await Permission.notification.request();
     }
     final notifGranted = await Permission.notification.status;
+    final batteryOptimized =
+        !(await BatteryOptimizationService.isIgnoringBatteryOptimizations());
 
     // Fotoğraf kalıcı olarak reddedilmiş mi?
     final photoPermanentlyDenied = hasPhoto
@@ -63,6 +70,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
         _photoGranted = hasPhoto;
         _notifGranted = notifGranted.isGranted;
         _photoPermanentlyDenied = photoPermanentlyDenied;
+        _batteryOptimized = batteryOptimized;
       });
     }
 
@@ -157,6 +165,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 subtitle: 'Verileriniz cihazınızdan çıkmaz',
                 colorScheme: colorScheme,
               ),
+              if (_batteryOptimized) ...[
+                const SizedBox(height: 12),
+                _buildBatteryOptimizationItem(colorScheme),
+              ],
 
               const Spacer(),
 
@@ -311,6 +323,56 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     color: colorScheme.onSurfaceVariant,
                     fontSize: 13,
                   ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBatteryOptimizationItem(ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.tertiaryContainer.withOpacity(0.45),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.battery_alert_rounded, color: colorScheme.tertiary),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Arka plan taraması için öneri',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Pil tasarrufu tarama devam ederken uygulamayı durdurabilir. '
+                  'Pil ayarlarından Galeri Detoks için kısıtlamayı kaldırabilirsiniz.',
+                  style: TextStyle(
+                    color: colorScheme.onTertiaryContainer,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextButton.icon(
+                  onPressed: () async {
+                    await BatteryOptimizationService.openSettings();
+                    if (!mounted) return;
+                    final optimized =
+                        !(await BatteryOptimizationService
+                            .isIgnoringBatteryOptimizations());
+                    setState(() => _batteryOptimized = optimized);
+                  },
+                  icon: const Icon(Icons.settings_rounded),
+                  label: const Text('Pil ayarlarını aç'),
                 ),
               ],
             ),

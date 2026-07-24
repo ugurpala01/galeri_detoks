@@ -32,7 +32,11 @@ class _ScanModeScreenState extends ConsumerState<ScanModeScreen> {
 
     int newCount = total;
     if (_lastScanDate != null) {
-      final newImages = await photoService.loadImagesAfterDate(_lastScanDate!);
+      final latest = ScanResultService.getLatestResult();
+      final newImages = await photoService.loadUnscannedImages(
+        afterDate: _lastScanDate!,
+        scannedAssetIds: latest?.scannedAssetIds.toSet() ?? {},
+      );
       newCount = newImages.length;
     }
 

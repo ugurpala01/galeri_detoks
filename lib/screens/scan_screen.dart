@@ -79,7 +79,10 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
     }
 
     final lastScanDate = latest.scanDate;
-    final newPhotos = await PhotoService().loadImagesAfterDate(lastScanDate);
+    final newPhotos = await PhotoService().loadUnscannedImages(
+      afterDate: lastScanDate,
+      scannedAssetIds: latest.scannedAssetIds.toSet(),
+    );
 
     setState(() {
       _latestResult = latest;
@@ -117,11 +120,17 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
     final ocrService = OcrService();
     final detected = <dynamic>[];
     final detectedIds = <String>[];
+    final scannedIds = <String>[];
+    final previouslyScannedIds =
+        _latestResult?.scannedAssetIds.toSet() ?? <String>{};
     ScanResult? result;
 
     try {
       final assets = incremental && _latestResult != null
-          ? await PhotoService().loadImagesAfterDate(_latestResult!.scanDate)
+          ? await PhotoService().loadUnscannedImages(
+              afterDate: _latestResult!.scanDate,
+              scannedAssetIds: _latestResult!.scannedAssetIds.toSet(),
+            )
           : await PhotoService().loadAllImages();
 
       final total = assets.length;
@@ -145,6 +154,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
 
         final asset = assets[i];
         final id = asset is AssetEntity ? asset.id : asset.path as String;
+        scannedIds.add(id);
         String? path;
 
         if (asset is AssetEntity) {
@@ -195,6 +205,10 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         scanDate: DateTime.now(),
         detectedAssetIds: detectedIds,
+        scannedAssetIds: {
+          ...previouslyScannedIds,
+          ...scannedIds,
+        }.toList(),
         totalScanned: total,
         detectedCount: detected.length,
         keywords: List<String>.from(keywords),
@@ -207,12 +221,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
         deletedCount: 0,
       );
 
-      ocrService.dispose();
-
       ref.read(isScanningProvider.notifier).state = false;
       ref.read(scanPhaseProvider.notifier).state = 0;
       ref.read(scanProgressProvider.notifier).state = 0.0;
       ref.read(scanStatusProvider.notifier).state = '';
+      ref.read(estimatedTimeProvider.notifier).state = '';
+      ref.read(shouldCancelScanProvider.notifier).state = false;
 
       await NotificationService.showCompletionNotification(
         detected.length,
@@ -230,7 +244,15 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
       ref.read(scanStatusProvider.notifier).state = 'Hata: $e';
       ref.read(isScanningProvider.notifier).state = false;
       ref.read(scanPhaseProvider.notifier).state = 0;
-      await NotificationService.cancelAll();
+      ref.read(scanProgressProvider.notifier).state = 0.0;
+      ref.read(estimatedTimeProvider.notifier).state = '';
+      ref.read(shouldCancelScanProvider.notifier).state = false;
+      await NotificationService.showErrorNotification(e.toString());
+    } finally {
+      ocrService.dispose();
+      if (mounted && ref.read(isScanningProvider)) {
+        ref.read(isScanningProvider.notifier).state = false;
+      }
     }
   }
 
@@ -261,6 +283,9 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
     ref.read(isScanningProvider.notifier).state = false;
     ref.read(scanPhaseProvider.notifier).state = 0;
     ref.read(scanProgressProvider.notifier).state = 0.0;
+    ref.read(estimatedTimeProvider.notifier).state = '';
+    ref.read(shouldCancelScanProvider.notifier).state = false;
+    NotificationService.cancelAll();
   }
 
   bool _shouldCancel() => ref.read(shouldCancelScanProvider);

@@ -344,6 +344,17 @@ class PhotoService {
     
     return filtered;
   }
+
+  Future<List<dynamic>> loadUnscannedImages({
+    required DateTime afterDate,
+    required Set<String> scannedAssetIds,
+  }) async {
+    final candidates = await loadImagesAfterDate(afterDate);
+    return candidates.where((asset) {
+      final id = asset is AssetEntity ? asset.id : (asset as File).path;
+      return !scannedAssetIds.contains(id);
+    }).toList();
+  }
   
   /// Dosya yolunu al (AssetEntity veya File için)
   static Future<String?> getPath(dynamic asset) async {
