@@ -42,14 +42,18 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
   List<dynamic> _pendingDetectedAssets = [];
   int _pendingTotalScanned = 0;
   AppLifecycleState? _appState;
+  late bool _autoStarting;
 
   @override
   void initState() {
     super.initState();
+    _autoStarting = widget.incremental;
     WidgetsBinding.instance.addObserver(this);
     _loadLatestResult().then((_) {
       if (widget.incremental && _latestResult != null) {
         _startScan(incremental: true);
+      } else if (_autoStarting) {
+        setState(() => _autoStarting = false);
       }
     });
   }
@@ -91,10 +95,19 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
   }
 
   Future<void> _startScan({bool incremental = false}) async {
+    if (ref.read(isScanningProvider)) {
+      // Zaten devam eden bir tarama var, ikinci tetiklemeyi yoksay.
+      if (_autoStarting) {
+        setState(() => _autoStarting = false);
+      }
+      return;
+    }
+
     final hasPhoto = await PermissionService.checkPhotoPermissions();
     if (!hasPhoto) {
       ref.read(scanStatusProvider.notifier).state =
           'Galeri izni gerekli. Ayarlardan izin verin.';
+      if (_autoStarting) setState(() => _autoStarting = false);
       return;
     }
 
@@ -107,7 +120,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
           ),
         );
       }
+      if (_autoStarting) setState(() => _autoStarting = false);
       return;
+    }
+
+    if (_autoStarting) {
+      setState(() => _autoStarting = false);
     }
 
     ref.read(isScanningProvider.notifier).state = true;
@@ -296,6 +314,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
     final scanProgress = ref.watch(scanProgressProvider);
     final scanStatus = ref.watch(scanStatusProvider);
     final estimatedTime = ref.watch(estimatedTimeProvider);
+
+    if (_autoStarting && !isScanning) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
