@@ -134,11 +134,26 @@ class _ScanModeScreenState extends ConsumerState<ScanModeScreen> {
                       _buildScanOption(
                         icon: Icons.bolt_rounded,
                         title: 'Sadece Yeni Fotoğraflar',
-                        subtitle: '$_newPhotoCount yeni fotoğraf',
-                        estimatedTime: '~${(_newPhotoCount / 400).ceil()} dk',
-                        isRecommended: true,
+                        subtitle: _newPhotoCount > 0
+                            ? '$_newPhotoCount yeni fotoğraf'
+                            : 'Yeni fotoğraf yok',
+                        estimatedTime: _newPhotoCount > 0
+                            ? '~${(_newPhotoCount / 400).ceil()} dk'
+                            : '-',
+                        isRecommended: _newPhotoCount > 0,
+                        disabled: _newPhotoCount == 0,
                         colorScheme: colorScheme,
-                        onTap: () => _startScan(incremental: true),
+                        onTap: _newPhotoCount > 0
+                            ? () => _startScan(incremental: true)
+                            : () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Taranacak yeni fotoğraf yok.',
+                                    ),
+                                  ),
+                                );
+                              },
                       ),
                     
                     const SizedBox(height: 16),
@@ -196,8 +211,11 @@ class _ScanModeScreenState extends ConsumerState<ScanModeScreen> {
     required bool isRecommended,
     required ColorScheme colorScheme,
     required VoidCallback onTap,
+    bool disabled = false,
   }) {
-    return GestureDetector(
+    return Opacity(
+      opacity: disabled ? 0.5 : 1.0,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -301,6 +319,7 @@ class _ScanModeScreenState extends ConsumerState<ScanModeScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

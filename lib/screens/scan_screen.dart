@@ -159,6 +159,13 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
             'Taranacak fotograf bulunamadi.';
         ref.read(isScanningProvider.notifier).state = false;
         ref.read(scanPhaseProvider.notifier).state = 0;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Taranacak yeni fotoğraf bulunamadı.'),
+            ),
+          );
+        }
         return;
       }
 
